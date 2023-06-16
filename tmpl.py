@@ -51,7 +51,7 @@ def_found_template_data = {
                 "properties": {
                     "extraction_plan": {
                       "type": "string",
-                      "description": "This is a step-by-step (and substep) plan walking through the process of extracting the next template section and fields inside. Start by identifying the next template (partial) and then step through the document fields you can see in that area, identifying any potential mustache sections for repeating items/lists, etc." 
+                      "description": "This is a step-by-step (and substep) plan walking through the process of extracting the next template partial (not a list of all partials) and fields inside. Start by identifying the next template (partial) and then step through the potential document fields you can see in that area, identifying any potential mustache Sections for repeating items/lists, etc. (e.g.) {{#somelist}}\n  <li>{{item}}</li>\n{{/somelist}}." 
                     },
                     "partial_name": {
                         "type": "string",
