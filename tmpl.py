@@ -40,7 +40,7 @@ def found_template_data(partial_name, template, data):
    with open(f"data/{partial_name}.json","w") as f: f.write(json.dumps(data))
    return json.dumps({"result": "success", 
                       "output_files": [ f"templates/{partial_name}",
-                                        f"data/{partial_name}.json"])
+                                        f"data/{partial_name}.json"]})
 
 def_found_template_data = {
             "name": "found_template_data",
