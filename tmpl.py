@@ -55,7 +55,7 @@ def_found_template_data = {
                     },
                     "data": {
                         "type": "object", "description": "Object with properties that when injected into the template will recreate the original HTML for that section.",
-                        "properties": None},
+                        "additionalProperties": True},
                 },
                 "required": ["partial_name", "data", "template"],
             },
