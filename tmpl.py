@@ -27,7 +27,7 @@ def usr(msg):
     return { "role": "user", "content": msg }
 
 def fn_res(name, res):
-    return {"role": "function", "name": name, "content": res }
+    return {"role": "function", "name": name, "content": json.dumps(res) }
 
 def sysmsg(msg):
     return { "role": "system", "content": msg }
@@ -51,10 +51,11 @@ def_found_template_data = {
                     },
                     "template": {
                         "type": "string",
-                        "description": "A mustache partial for the page section. Remove text or image literals and replace with semantic variable names etc. according to normal mustache.js usage. IMPORTANT: For header, make sure to include full page start elements such as html, head etc. and nav so that it will suffice for valid html at the top of the file. Also, use mustache sections and data for repeating items like lists such as nav items.",
+                        "description": "A mustache partial for the page section. Remove text or image literals and replace with semantic variable names etc. according to normal mustache.js usage. IMPORTANT: For header, make sure to include full page start elements such as doctype, HTML, HEAD etc. and nav so that it will suffice for valid html at the top of the file. Also, use mustache sections and data for repeating items like lists such as nav items.",
                     },
                     "data": {
                         "type": "object", "description": "Object with properties that when injected into the template will recreate the original HTML for that section.",
+                        "properties": {},
                         "additionalProperties": True},
                 },
                 "required": ["partial_name", "data", "template"],
@@ -64,7 +65,7 @@ def_found_template_data = {
 def extract_template(msgs, filename):
   if filename is not None:
       html = open(filename, 'r').read()
-      prompt = usr(f"Examine the following HTML and convert to mustache template partials using multiple calls to the function described. Should have header, footer, and at least one partial for the body depending on the best logical decomposition.\n{html}")
+      prompt = usr(f"Examine the following HTML and convert to mustache template partials using multiple calls to the function described. Should have header, footer, and at least one partial for the body depending on the best logical decomposition. The header partial must include starting tags like doctype, html etc. and footer must include closing html tag, since those partials will be used to wrap the final html which must be valid.\n{html}")
   else:
       prompt = usr(f"Convert any remaining sections.")
   system = sysmsg("You are an experienced AI front-end engineer.")
