@@ -33,8 +33,8 @@ def sysmsg(msg):
     return { "role": "system", "content": msg }
 
 def found_template_data(partial_name, template, data):
-   os.makedirs(f"templates/{partial_name}", exist_ok=True)
-   os.makedirs(f"data/{partial_name}", exist_ok=True)
+   os.makedirs(f"templates", exist_ok=True)
+   os.makedirs(f"data", exist_ok=True)
    print(f"saving partial {partial_name}") 
    with open(f"templates/{partial_name}","w") as f: f.write(template)
    with open(f"data/{partial_name}.json","w") as f: f.write(json.dumps(data))
@@ -51,12 +51,12 @@ def_found_template_data = {
                     },
                     "template": {
                         "type": "string",
-                        "description": "A mustache partial for the page section. Remove text or image literals and replace with semantic variable names etc. according to normal mustache.js usage. IMPORTANT: For header, make sure to include full page start elements such as html, head etc. and nav.",
+                        "description": "A mustache partial for the page section. Remove text or image literals and replace with semantic variable names etc. according to normal mustache.js usage. IMPORTANT: For header, make sure to include full page start elements such as html, head etc. and nav. Use appropriate mustache constructs and data for repeating items like lists.",
                     },
-                    "template_data": {
-                        "type": "object", "description": "Object with properties that when injected into the header template will recreate the original HTML for that section."},
+                    "data": {
+                        "type": "object", "description": "Object with properties that when injected into the template will recreate the original HTML for that section."},
                 },
-                "required": ["partial_name", "template_data", "template"],
+                "required": ["partial_name", "data", "template"],
             },
         }
 
@@ -77,7 +77,7 @@ def extract_template(msgs, filename):
       obj = json.loads(args)
       func_resp = found_template_data(obj.get("partial_name"),
                                       obj.get("partial_template"),
-                                      obj.get("template_data"))
+                                      obj.get("data"))
 
       msgs += fn_res("found_template_data", func_resp)
       return extract_template(msgs) 
