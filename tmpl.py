@@ -9,7 +9,7 @@ import json
 
 def chat_call(msgs, funcs):
     print(funcs[0]["name"])
-
+    print(msgs)
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-16k",
         messages=msgs,
@@ -68,9 +68,9 @@ def_found_template_data = {
 def extract_template(msgs, filename):
   if filename is not None:
       html = open(filename, 'r').read()
-      prompt = usr(f"Examine the following HTML and convert to mustache template partials using multiple calls to the function described. Should have header, footer, and at least one partial for the body depending on the best logical decomposition. The header partial must include starting tags like doctype, html etc. and footer must include closing html tag, since those partials will be used to wrap the final html which must be valid.\n{html}")
+      prompt = usr(f"Examine the following HTML and convert to mustache template partials using calls to the function described. Should have header, footer, and at least one partial for the body depending on the best logical decomposition. The header partial must include starting tags like doctype, html etc. and footer must include closing html tag, since those partials will be used to wrap the final html which must be valid.\n{html}")
   else:
-      prompt = usr(f"Convert any remaining sections.")
+      prompt = usr(f"Convert the next remainin section, if any (see message above with HTML).")
   system = sysmsg("You are an experienced AI front-end engineer.")
   response = chat_call([system]+msgs+[prompt], [def_found_template_data])
   message = response["choices"][0]["message"]
@@ -84,7 +84,7 @@ def extract_template(msgs, filename):
                                       obj.get("template"),
                                       obj.get("data"))
 
-      msgs += fn_res("found_template_data", func_resp)
+      msgs += [fn_res("found_template_data", func_resp)]
       return extract_template(msgs, None) 
   else:
       print("Done.")
