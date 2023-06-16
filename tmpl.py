@@ -51,7 +51,7 @@ def_found_template_data = {
                 "properties": {
                     "partial_name": {
                         "type": "string",
-                        "description": "Name of the mustache partial for the section extracted, such as header, footer, features, testimonials, etc."
+                        "description": "Name of the mustache partial for the part extracted, such as header, footer, features, testimonials, etc."
                     },
                     "extraction_plan": {
                         "type": "string",
@@ -63,7 +63,7 @@ def_found_template_data = {
                         "additionalProperties": True},
                     "template": {
                         "type": "string",
-                        "description": "A mustache partial for the part of the page. Remove text or image literals and replace with semantic data names etc. according to normal mustache.js usage. IMPORTANT: For header, make sure to include full page start elements such as doctype, HTML, HEAD etc. so that it will suffice for valid html at the top of the file. \n CRITICAL: Also use mustache sections and data for repeating items like lists such as nav items rather than including them literally e.g\n{{#somelist}}\n  <li>{{item}}</li>\n{{/somelist}}.",
+                        "description": "A mustache partial for the part of the page. Remove text or image literals and replace with semantic data names etc. according to normal mustache.js usage. IMPORTANT: For header, make sure to include start elements such as doctype, HTML, HEAD etc. \n CRITICAL: Also use mustache sections and data for repeating items like lists such as nav items rather than including them literally e.g\n{{#somelist}}\n  <li>{{item}}</li>\n{{/somelist}}.",
                     },
                },
                 "required": ["extraction_plan", "partial_name", "data", "template"],
