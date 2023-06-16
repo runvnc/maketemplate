@@ -52,15 +52,15 @@ def_found_template_data = {
                         "type": "string",
                         "description": "Name of the mustache partial for the section extracted, such as header, footer, features, testimonials, etc."
                     },
-                    "template": {
-                        "type": "string",
-                        "description": "A mustache partial for the page section. Remove text or image literals and replace with semantic variable names etc. according to normal mustache.js usage. IMPORTANT: For header, make sure to include full page start elements such as doctype, HTML, HEAD etc. so that it will suffice for valid html at the top of the file. Also, use mustache sections and data for repeating items like lists such as nav items rather than including them literally e.g\n{{#somelist}}\n  <li>{{item}}</li>\n{{/somelist}}.",
-                    },
                     "data": {
-                        "type": "object", "description": "Object with properties that when injected into the template will recreate the original HTML for that section.",
+                        "type": "object", "description": "Object with properties that when injected into the template will recreate the original HTML for that section. Some properties may contain arrays. Use the data as much as possible instead of including literal text, for anything that is repeating or is likely to need to be edited.",
                         "properties": {},
                         "additionalProperties": True},
-                },
+                    "template": {
+                        "type": "string",
+                        "description": "A mustache partial for the page section. Remove text or image literals and replace with semantic data names etc. according to normal mustache.js usage. IMPORTANT: For header, make sure to include full page start elements such as doctype, HTML, HEAD etc. so that it will suffice for valid html at the top of the file. \n CRITICAL: Also use mustache sections and data for repeating items like lists such as nav items rather than including them literally e.g\n{{#somelist}}\n  <li>{{item}}</li>\n{{/somelist}}.",
+                    },
+               },
                 "required": ["partial_name", "data", "template"],
             },
         }
@@ -68,7 +68,7 @@ def_found_template_data = {
 def extract_template(msgs, filename):
   if filename is not None:
       html = open(filename, 'r').read()
-      prompt = usr(f"Examine the following HTML and convert to mustache template partials using calls to the function described. Should have header, footer, and at least one partial for the body depending on the best logical decomposition. The header partial must include starting tags like doctype, html, nav (or equivalent) etc. and footer must include closing html tag, since those partials will be used to wrap the final html which must be valid.\n{html}")
+      prompt = usr(f"Examine the following HTML and convert to mustache template partials with extracted fields rather than literal text, using calls to the function described. Should have header, footer, and at least one partial for the body depending on the best logical decomposition. The header partial must include starting tags like doctype, html, nav (or equivalent) etc. and footer must include closing html tag, since those partials will be used to wrap the final html which must be valid.\n\n{html}")
   else:
       prompt = usr(f"Convert the next remainin section, if any (see message above with HTML).")
   system = sysmsg("You are an experienced AI front-end engineer.")
@@ -84,7 +84,7 @@ def extract_template(msgs, filename):
                                       obj.get("template"),
                                       obj.get("data"))
 
-      msgs += [fn_res("found_template_data", func_resp)]
+      msgs += [prompt, fn_res("found_template_data", func_resp)]
       return extract_template(msgs, None) 
   else:
       print("Done.")
