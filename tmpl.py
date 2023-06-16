@@ -36,10 +36,10 @@ def found_template_data(partial_name, template, data):
    os.makedirs(f"templates", exist_ok=True)
    os.makedirs(f"data", exist_ok=True)
    print(f"saving partial {partial_name}") 
-   with open(f"templates/{partial_name}","w") as f: f.write(template)
+   with open(f"templates/{partial_name}.mustache","w") as f: f.write(template)
    with open(f"data/{partial_name}.json","w") as f: f.write(json.dumps(data))
    return json.dumps({"result": "success", 
-                      "output_files": [ f"templates/{partial_name}",
+                      "output_files": [ f"templates/{partial_name}.mustache",
                                         f"data/{partial_name}.json"]})
 
 def_found_template_data = {
@@ -70,7 +70,7 @@ def extract_template(msgs, filename):
       html = open(filename, 'r').read()
       prompt = usr(f"Examine the following HTML and convert to mustache template partials with extracted fields rather than literal text, using calls to the function described. Should have header, footer, and at least one partial for the body depending on the best logical decomposition. The header partial must include starting tags like doctype, html, nav (or equivalent) etc. and footer must include closing html tag, since those partials will be used to wrap the final html which must be valid.\n\n{html}")
   else:
-      prompt = usr(f"Convert the next remainin section, if any (see message above with HTML).")
+      prompt = usr(f"Convert the next remaining section(s) using calls to found_template_data, if any (see message above with HTML).")
   system = sysmsg("You are an experienced AI front-end engineer.")
   response = chat_call([system]+msgs+[prompt], [def_found_template_data])
   message = response["choices"][0]["message"]
