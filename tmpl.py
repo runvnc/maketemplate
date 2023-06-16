@@ -2,6 +2,7 @@ import sys
 import os
 import openai
 import json
+import re
 
 openai.api_key = open(".OPENAI_API_KEY").read().rstrip('\n')
 
@@ -68,6 +69,9 @@ def_found_template_data = {
 def extract_template(msgs, filename):
   if filename is not None:
       html = open(filename, 'r').read()
+      html = re.sub(r'\s', '', html)
+ 
+
       prompt = usr(f"Examine the following HTML and convert to mustache template partials with extracted fields rather than literal text, using calls to the function described. Should have header, footer, and at least one partial for the body depending on the best logical decomposition. The header partial must include starting tags like doctype, html, nav (or equivalent) etc. and footer must include closing html tag, since those partials will be used to wrap the final html which must be valid.\n\n{html}")
   else:
       prompt = usr(f"Convert the next remaining section(s) using calls to found_template_data, if any (see message above with HTML).")
