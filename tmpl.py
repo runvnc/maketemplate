@@ -27,7 +27,7 @@ def usr(msg):
 def fn_res(name, res):
     return {"role": "function", "name": name, "content": res }
 
-def sys(msg):
+def sysmsg(msg):
     return { "role": "system", "content": msg }
 
 def found_template_data(p):
@@ -64,8 +64,8 @@ def extract_template(msgs, filename):
       prompt = usr(f"Examine the following HTML and convert to mustache template partials using multiple calls to the function described. Should have header, footer, and at least one partial for the body depending on the best logical decomposition.\n{html}")
   else:
       prompt = usr(f"Convert any remaining sections.")
-  system = sys("You are an experienced AI front-end engineer.")
-  response = chat_call(system+msgs+prompt, [found_template_data])
+  system = sysmsg("You are an experienced AI front-end engineer.")
+  response = chat_call([system]+msgs+[prompt], [found_template_data])
   message = response["choices"][0]["message"]
   print(message)
   if message.get("function_call"):
@@ -74,8 +74,9 @@ def extract_template(msgs, filename):
                                       message.get("template_data"))
 
       msgs += fn_res("found_template_data", func_resp)
-      extract_template(msgs) 
-
+      return extract_template(msgs) 
+  else:
+      print("Done.")
 
 extract_template([], sys.argv[1])
 
