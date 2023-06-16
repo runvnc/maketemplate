@@ -12,7 +12,7 @@ def chat_call(msgs, funcs):
     print(funcs[0]["name"])
     print(msgs)
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-16k",
+        model="gpt-4-0613",
         messages=msgs,
         temperature=0,
         functions=funcs,
@@ -69,7 +69,7 @@ def_found_template_data = {
 def extract_template(msgs, filename):
   if filename is not None:
       html = open(filename, 'r').read()
-      html = re.sub(r'\s', '', html)
+      html = re.sub(r'(  |\t)', '', html)
  
 
       prompt = usr(f"Examine the following HTML and convert to mustache template partials with extracted fields rather than literal text, using calls to the function described. Should have header, footer, and at least one partial for the body depending on the best logical decomposition. The header partial must include starting tags like doctype, html, nav (or equivalent) etc. and footer must include closing html tag, since those partials will be used to wrap the final html which must be valid.\n\n{html}")
