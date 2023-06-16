@@ -12,7 +12,7 @@ def chat_call(msgs, funcs):
     print(funcs[0]["name"])
     print(msgs)
     response = openai.ChatCompletion.create(
-        model="gpt-4-0613",
+        model="gpt-3.5-turbo-16k-0613",
         messages=msgs,
         temperature=0,
         functions=funcs,
@@ -49,6 +49,10 @@ def_found_template_data = {
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "extraction_plan": {
+                      "type": "string",
+                      "description": "This is a step-by-step (and substep) plan walking through the process of extracting the next template section and fields inside. Start by identifying the next template (partial) and then step through the document fields you can see in that area, identifying any potential mustache sections for repeating items/lists, etc." 
+                    },
                     "partial_name": {
                         "type": "string",
                         "description": "Name of the mustache partial for the section extracted, such as header, footer, features, testimonials, etc."
@@ -62,7 +66,7 @@ def_found_template_data = {
                         "description": "A mustache partial for the page section. Remove text or image literals and replace with semantic data names etc. according to normal mustache.js usage. IMPORTANT: For header, make sure to include full page start elements such as doctype, HTML, HEAD etc. so that it will suffice for valid html at the top of the file. \n CRITICAL: Also use mustache sections and data for repeating items like lists such as nav items rather than including them literally e.g\n{{#somelist}}\n  <li>{{item}}</li>\n{{/somelist}}.",
                     },
                },
-                "required": ["partial_name", "data", "template"],
+                "required": ["extraction_plan", "partial_name", "data", "template"],
             },
         }
 
