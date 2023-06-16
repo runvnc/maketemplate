@@ -45,25 +45,25 @@ def found_template_data(partial_name, template, data):
 
 def_found_template_data = {
             "name": "found_template_data",
-            "description": "Save a section of disentangled mustache template and JSON data extracted from HTML provided by the user.",
+            "description": "Save a partial of disentangled mustache template and JSON data extracted from HTML provided by the user. Sucher as header, footer, or subparts for complex pages, like features, testimonials, etc.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "extraction_plan": {
-                      "type": "string",
-                      "description": "This is a step-by-step (and substep) plan walking through the process of extracting the next template partial (not a list of all partials) and fields inside. Start by identifying the next template (partial) and then step through the potential document fields you can see in that area, identifying any potential mustache Sections for repeating items/lists, etc. (e.g.) {{#somelist}}\n  <li>{{item}}</li>\n{{/somelist}}." 
-                    },
                     "partial_name": {
                         "type": "string",
                         "description": "Name of the mustache partial for the section extracted, such as header, footer, features, testimonials, etc."
                     },
-                    "data": {
+                    "extraction_plan": {
+                        "type": "string",
+                      "description": "This is a step-by-step (and substep) plan walking through the process of extracting the next template partial (NOT a list of all partials found) and fields inside. Start by identifying the next template (partial) and then step through the potential document fields you can see only in that area, identifying any potential mustache repeating items/lists, etc. (e.g. {{#somelist}}\n  <li>{{item}}</li>\n{{/somelist}})." 
+                    },
+                   "data": {
                         "type": "object", "description": "Object with properties that when injected into the template will recreate the original HTML for that section. Some properties may contain arrays. Use the data as much as possible instead of including literal text, for anything that is repeating or is likely to need to be edited.",
                         "properties": {},
                         "additionalProperties": True},
                     "template": {
                         "type": "string",
-                        "description": "A mustache partial for the page section. Remove text or image literals and replace with semantic data names etc. according to normal mustache.js usage. IMPORTANT: For header, make sure to include full page start elements such as doctype, HTML, HEAD etc. so that it will suffice for valid html at the top of the file. \n CRITICAL: Also use mustache sections and data for repeating items like lists such as nav items rather than including them literally e.g\n{{#somelist}}\n  <li>{{item}}</li>\n{{/somelist}}.",
+                        "description": "A mustache partial for the part of the page. Remove text or image literals and replace with semantic data names etc. according to normal mustache.js usage. IMPORTANT: For header, make sure to include full page start elements such as doctype, HTML, HEAD etc. so that it will suffice for valid html at the top of the file. \n CRITICAL: Also use mustache sections and data for repeating items like lists such as nav items rather than including them literally e.g\n{{#somelist}}\n  <li>{{item}}</li>\n{{/somelist}}.",
                     },
                },
                 "required": ["extraction_plan", "partial_name", "data", "template"],
