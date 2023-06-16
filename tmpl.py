@@ -54,7 +54,8 @@ def_found_template_data = {
                         "description": "A mustache partial for the page section. Remove text or image literals and replace with semantic variable names etc. according to normal mustache.js usage. IMPORTANT: For header, make sure to include full page start elements such as html, head etc. and nav. Use appropriate mustache constructs and data for repeating items like lists.",
                     },
                     "data": {
-                        "type": "object", "description": "Object with properties that when injected into the template will recreate the original HTML for that section."},
+                        "type": "object", "description": "Object with properties that when injected into the template will recreate the original HTML for that section.",
+                        "properties": None},
                 },
                 "required": ["partial_name", "data", "template"],
             },
@@ -76,7 +77,7 @@ def extract_template(msgs, filename):
       print(args)
       obj = json.loads(args)
       func_resp = found_template_data(obj.get("partial_name"),
-                                      obj.get("partial_template"),
+                                      obj.get("template"),
                                       obj.get("data"))
 
       msgs += fn_res("found_template_data", func_resp)
