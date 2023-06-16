@@ -38,6 +38,9 @@ def found_template_data(partial_name, template, data):
    print(f"saving partial {partial_name}") 
    with open(f"templates/{partial_name}","w") as f: f.write(template)
    with open(f"data/{partial_name}.json","w") as f: f.write(json.dumps(data))
+   return json.dumps({"result": "success", 
+                      "output_files": [ f"templates/{partial_name}",
+                                        f"data/{partial_name}.json"])
 
 def_found_template_data = {
             "name": "found_template_data",
@@ -51,7 +54,7 @@ def_found_template_data = {
                     },
                     "template": {
                         "type": "string",
-                        "description": "A mustache partial for the page section. Remove text or image literals and replace with semantic variable names etc. according to normal mustache.js usage. IMPORTANT: For header, make sure to include full page start elements such as doctype, HTML, HEAD etc. and nav so that it will suffice for valid html at the top of the file. Also, use mustache sections and data for repeating items like lists such as nav items.",
+                        "description": "A mustache partial for the page section. Remove text or image literals and replace with semantic variable names etc. according to normal mustache.js usage. IMPORTANT: For header, make sure to include full page start elements such as doctype, HTML, HEAD etc. so that it will suffice for valid html at the top of the file. Also, use mustache sections and data for repeating items like lists such as nav items rather than including them literally.",
                     },
                     "data": {
                         "type": "object", "description": "Object with properties that when injected into the template will recreate the original HTML for that section.",
