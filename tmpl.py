@@ -4,6 +4,8 @@ import openai
 import json
 import re
 
+theme = "default"
+
 openai.api_key = open(".OPENAI_API_KEY").read().rstrip('\n')
 
 import json
@@ -12,7 +14,7 @@ def chat_call(msgs, funcs):
     print(funcs[0]["name"])
     print(msgs)
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-16k-0613",
+        model="gpt-4-0613",
         messages=msgs,
         temperature=0,
         functions=funcs,
@@ -37,15 +39,15 @@ def found_template_data(partial_name, template, data):
    os.makedirs(f"templates", exist_ok=True)
    os.makedirs(f"data", exist_ok=True)
    print(f"saving partial {partial_name}") 
-   with open(f"templates/{partial_name}.mustache","w") as f: f.write(template)
-   with open(f"data/{partial_name}.json","w") as f: f.write(json.dumps(data))
+   with open(f"themes/{theme}/partials/{partial_name}.mustache","w") as f: f.write(template)
+   with open(f"themes/{theme}/data/{partial_name}.json","w") as f: f.write(json.dumps(data))
    return json.dumps({"result": "success", 
                       "output_files": [ f"templates/{partial_name}.mustache",
                                         f"data/{partial_name}.json"]})
 
 def_found_template_data = {
             "name": "found_template_data",
-            "description": "Save a partial of disentangled mustache template and JSON data extracted from HTML provided by the user. Sucher as header, footer, or subparts for complex pages, like features, testimonials, etc.",
+            "description": "Save a partial of disentangled mustache template and JSON data extracted from HTML provided by the user. Such as header, footer, or subparts for complex pages, like features, testimonials, etc.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -96,6 +98,8 @@ def extract_template(msgs, filename):
       return extract_template(msgs, None) 
   else:
       print("Done.")
+
+theme = sys.argv[2]
 
 extract_template([], sys.argv[1])
 
